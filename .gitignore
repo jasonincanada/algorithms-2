@@ -1,0 +1,7 @@
+kosaraju/bin/*
+kosaraju/obj/*
+
+*.cache
+*.dll
+*.exe
+*.pdb
