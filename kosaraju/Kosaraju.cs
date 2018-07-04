@@ -4,15 +4,12 @@ using System.Collections.Generic;
 namespace jrh.Algorithms.Kosaraju
 {
     class Kosaraju
-    {        
+    {
         private Graph _graph;
-        private Node _leader;
         private List<Node> _finishingOrder;
 
         Func<Node, List<Node>> _targetGetter;
         private bool _firstPass;
-
-        public int NodesMarked { get; set;}
 
         public Kosaraju(Graph graph)
         {
@@ -21,61 +18,76 @@ namespace jrh.Algorithms.Kosaraju
 
         public Dictionary<Node, List<Node>> FindSCCs()
         {
-            // The initial processing order is arbitrary... just use the order they were added to the graph
+            // The initial processing order is arbitrary... just use the order they are stored in the list
             IEnumerable<Node> processingOrder = _graph.EnumerableNodes();
 
             Console.WriteLine("DFS Pass 1...");
             _firstPass = true;
-            _targetGetter = (n => n.ArrowTargets);
+            _targetGetter = (n => n.ArrowSources);
             DFSLoop(processingOrder);
 
             Console.WriteLine("DFS Pass 2...");
             _firstPass = false;
-            _graph.SetUnexplored();            
+            _graph.SetUnexplored();
             _finishingOrder.Reverse();
-            _targetGetter = (n => n.ArrowSources);
+            _targetGetter = (n => n.ArrowTargets);
             DFSLoop(_finishingOrder);
 
             return _graph.GetSCCs();
         }
 
         void DFSLoop(IEnumerable<Node> processingOrder)
-        {             
-            _leader = null;
+        {
             _finishingOrder = new List<Node>();
 
             foreach (Node node in processingOrder)
             {
                 if (node.Explored)
                     continue;
-                
-                _leader = node;
-                
+
                 DFS(node);
-            }            
+            }
         }
 
-        void DFS(Node node)
+        void DFS(Node leader)
         {
-            node.SetExplored();
-            
-            NodesMarked++;
-            if (NodesMarked % 1000 == 0)
-                Console.WriteLine("Marked the {0}th node", NodesMarked);
+            var stack = new Stack<Tuple<Node, int>>();
 
-            if (!_firstPass)
-               _graph.AddNodeToSCC(_leader, node);
+            leader.SetExplored();
+            stack.Push(new Tuple<Node, int>(leader, 0));
 
-            foreach (Node target in _targetGetter(node))
+            while (stack.Count > 0)
             {
+                var current = stack.Pop();
+                var node = current.Item1;
+                var index = current.Item2;
+                var targets = _targetGetter(node);
+
+                // Finishing trying all of this node's outgoing arrows?
+                if (index >= targets.Count)
+                {
+                    if (_firstPass)
+                        _finishingOrder.Add(node);
+
+                    continue;
+                }
+
+                // The next time we consider this node, look at the next arrow
+                stack.Push(new Tuple<Node, int>(node, index + 1));
+
+                var target = targets[index];
+
                 if (target.Explored)
                     continue;
-                
-                DFS(target);
-            }
 
-            if (_firstPass)
-                _finishingOrder.Add(node);
+                // We've found an unexplored target node
+                target.SetExplored();
+
+                if (!_firstPass)
+                    _graph.AddNodeToSCC(leader, target);
+
+                stack.Push(new Tuple<Node, int>(target, 0));
+            }
         }
-    } 
+    }
 }
