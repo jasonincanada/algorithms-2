@@ -63,7 +63,7 @@ namespace jrh.Algorithms.Kosaraju
                 var index = current.Item2;
                 var targets = _targetGetter(node);
 
-                // Finishing trying all of this node's outgoing arrows?
+                // Finished trying all of this node's outgoing arrows?
                 if (index >= targets.Count)
                 {
                     if (_firstPass)
