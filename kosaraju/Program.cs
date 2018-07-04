@@ -3,11 +3,11 @@
 
    Programming Assignment #1 - Find the strongly connected components of a directed graph
 
-   Remarks:  This code works on small sample sizes. It correctly computes the 3 strongly connected
-             components of the graph listed in Sample.txt, which is the 9-node graph shown on the
-             lecture slides.  With the main assignment input though it overflows the stack around
-             the 36,000th vertex, and there are ~875,000 vertices.  So the next version will need
-             to use a stack of nodes to backtrack instead of recursively calling DFS().
+   Remarks:  This code works on arbitrary graph sizes, limited only by the computer's heap. It
+             computes all strongly connected components of the input graph using Kosaraju's
+             two-pass Depth-First Search algorithm.  My initial attempt using recursion failed
+             with a stack overflow, so this version uses a stack of nodes along with their
+             progress through all outgoing arrows in order to implement backtracking.
 
    Author: Jason Hooper
 */
