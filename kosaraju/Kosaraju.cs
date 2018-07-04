@@ -7,13 +7,15 @@ namespace jrh.Algorithms.Kosaraju
     {
         private Graph _graph;
         private List<Node> _finishingOrder;
+        private ILogger _log;
 
         Func<Node, List<Node>> _targetGetter;
         private bool _firstPass;
 
-        public Kosaraju(Graph graph)
+        public Kosaraju(Graph graph, ILogger log)
         {
             _graph = graph;
+            _log = log;
         }
 
         public Dictionary<Node, List<Node>> FindSCCs()
@@ -21,12 +23,12 @@ namespace jrh.Algorithms.Kosaraju
             // The initial processing order is arbitrary... just use the order they are stored in the list
             IEnumerable<Node> processingOrder = _graph.EnumerableNodes();
 
-            Console.WriteLine("DFS Pass 1...");
+            _log.Log("DFS Pass 1...");
             _firstPass = true;
             _targetGetter = (n => n.ArrowSources);
             DFSLoop(processingOrder);
 
-            Console.WriteLine("DFS Pass 2...");
+            _log.Log("DFS Pass 2...");
             _firstPass = false;
             _graph.SetUnexplored();
             _finishingOrder.Reverse();
