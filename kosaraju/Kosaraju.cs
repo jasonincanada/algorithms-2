@@ -20,6 +20,8 @@ namespace jrh.Algorithms.Kosaraju
 
         public Dictionary<Node, List<Node>> FindSCCs()
         {
+            _finishingOrder = new List<Node>();
+
             // The initial processing order is arbitrary... just use the order they are stored in the list
             IEnumerable<Node> processingOrder = _graph.EnumerableNodes();
 
@@ -40,8 +42,6 @@ namespace jrh.Algorithms.Kosaraju
 
         void DFSLoop(IEnumerable<Node> processingOrder)
         {
-            _finishingOrder = new List<Node>();
-
             foreach (Node node in processingOrder)
             {
                 if (node.Explored)
