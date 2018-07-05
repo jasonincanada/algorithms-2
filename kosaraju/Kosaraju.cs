@@ -8,8 +8,6 @@ namespace jrh.Algorithms.Kosaraju
         private Graph _graph;
         private List<Node> _finishingOrder;
         private ILogger _log;
-
-        Func<Node, List<Node>> _targetGetter;
         private bool _firstPass;
 
         public Kosaraju(Graph graph, ILogger log)
@@ -25,16 +23,17 @@ namespace jrh.Algorithms.Kosaraju
             // The initial processing order is arbitrary... just use the order they are stored in the list
             IEnumerable<Node> processingOrder = _graph.EnumerableNodes();
 
+            // The first DFS pass uses the reverse of the graph
+            _graph.SetReverse();
             _log.Log("DFS Pass 1...");
             _firstPass = true;
-            _targetGetter = (n => n.ArrowSources);
             DFSLoop(processingOrder);
 
             _log.Log("DFS Pass 2...");
             _firstPass = false;
+            _graph.SetForward();
             _graph.SetUnexplored();
             _finishingOrder.Reverse();
-            _targetGetter = (n => n.ArrowTargets);
             DFSLoop(_finishingOrder);
 
             return _graph.GetSCCs();
@@ -63,7 +62,7 @@ namespace jrh.Algorithms.Kosaraju
                 var current = stack.Pop();
                 var node = current.Item1;
                 var index = current.Item2;
-                var targets = _targetGetter(node);
+                var targets = _graph.GetTargets(node);
 
                 // Finished trying all of this node's outgoing arrows?
                 if (index >= targets.Count)
