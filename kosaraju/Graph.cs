@@ -7,8 +7,8 @@ namespace jrh.Algorithms.Kosaraju
     class Node
     {
         public int Number { get; private set; }
-        public List<Node> ArrowTargets { get; private set; }
-        public List<Node> ArrowSources { get; private set; }
+        public IList<Node> ArrowTargets { get; private set; }
+        public IList<Node> ArrowSources { get; private set; }
 
         public bool Explored { get; private set; }
 
@@ -41,16 +41,16 @@ namespace jrh.Algorithms.Kosaraju
 
     class Graph
     {
-        private List<Node> _nodes;
+        private IList<Node> _nodes;
         private bool _isReversed;
 
         // Strongly connected components
-        private Dictionary<Node, List<Node>> _SCCs;
+        private Dictionary<Node, ICollection<Node>> _SCCs;
 
-        public Graph(List<Node> nodes)
+        public Graph(IList<Node> nodes)
         {
             _nodes = nodes;
-            _SCCs = new Dictionary<Node, List<Node>>();
+            _SCCs = new Dictionary<Node, ICollection<Node>>();
 
             SetForward();
         }
@@ -80,7 +80,7 @@ namespace jrh.Algorithms.Kosaraju
         }
 
         // Return the targets for a node, taking into account whether the graph is reversed
-        public List<Node> GetTargets(Node node)
+        public IList<Node> GetTargets(Node node)
         {
             if (_isReversed)
                 return node.ArrowSources;
@@ -100,7 +100,7 @@ namespace jrh.Algorithms.Kosaraju
             _SCCs[leader].Add(node);
         }
 
-        public Dictionary<Node, List<Node>> GetSCCs()
+        public Dictionary<Node, ICollection<Node>> GetSCCs()
         {
             return _SCCs;
         }
@@ -118,7 +118,7 @@ namespace jrh.Algorithms.Kosaraju
 
         public static Graph FromFile(string filename)
         {
-            List<Tuple<int, int>> edges = new List<Tuple<int, int>>();
+            ICollection<Tuple<int, int>> edges = new List<Tuple<int, int>>();
 
             int maxNodeNumber = 0;
 
@@ -141,7 +141,7 @@ namespace jrh.Algorithms.Kosaraju
                 }
             }
 
-            List<Node> nodes = new List<Node>();
+            IList<Node> nodes = new List<Node>();
 
             for (int i = 1; i <= maxNodeNumber; i++)
                 nodes.Add(new Node(i));

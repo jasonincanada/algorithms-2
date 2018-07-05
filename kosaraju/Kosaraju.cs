@@ -16,7 +16,7 @@ namespace jrh.Algorithms.Kosaraju
             _log = log;
         }
 
-        public Dictionary<Node, List<Node>> FindSCCs()
+        public Dictionary<Node, ICollection<Node>> FindSCCs()
         {
             _finishingOrder = new List<Node>();
 
