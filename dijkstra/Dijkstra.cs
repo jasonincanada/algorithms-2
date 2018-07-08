@@ -1,13 +1,14 @@
+using System;
 using System.Linq;
 
 namespace jrh.Algorithms.Dijkstra
 {
-    class DijkstraSearch
+    class DijkstraSearch<T> where T : IEquatable<T>
     {
-        private Graph _graph;
+        private Graph<T> _graph;
         private ILogger _log;
 
-        public DijkstraSearch(Graph graph, Vertex start, ILogger log)
+        public DijkstraSearch(Graph<T> graph, Vertex<T> start, ILogger log)
         {
             _graph = graph;
             _log = log;
@@ -22,7 +23,7 @@ namespace jrh.Algorithms.Dijkstra
 
         // Dijkstra's greedy score for an edge is the edge's weight plus the shortest distance
         // calculated up to the source vertex
-        private static long GreedyScore(WeightedEdge edge)
+        private static long GreedyScore(WeightedEdge<T> edge)
         {
             return edge.Source.ShortestDistance + edge.Weight;
         }

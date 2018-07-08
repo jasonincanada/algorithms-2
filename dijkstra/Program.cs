@@ -24,12 +24,12 @@ namespace jrh.Algorithms.Dijkstra
     {
         static void Main(string[] args)
         {
-            Graph graph = Graph.FromAdjacencyFile("sample.txt");
-            Vertex start = graph.GetVertex(1);
+            Graph<int> graph = Graph<int>.IntsFromAdjacencyFile("sample.txt");
+            Vertex<int> start = graph.GetVertex(1);
 
-            var search = new DijkstraSearch(graph,
-                                            start,
-                                            new ConsoleLogger());
+            var search = new DijkstraSearch<int>(graph,
+                                                 start,
+                                                 new ConsoleLogger());
 
             var inspect = new int[] { 1, 2, 3, 4 };
 

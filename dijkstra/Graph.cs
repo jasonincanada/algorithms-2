@@ -5,13 +5,13 @@ using System.Linq;
 
 namespace jrh.Algorithms.Dijkstra
 {
-    class WeightedEdge
+    class WeightedEdge<T>
     {
-        public Vertex Source { get; private set; }
-        public Vertex Target { get; private set; }
+        public Vertex<T> Source { get; private set; }
+        public Vertex<T> Target { get; private set; }
         public long Weight { get; private set; }
 
-        public WeightedEdge(Vertex source, Vertex target, long weight)
+        public WeightedEdge(Vertex<T> source, Vertex<T> target, long weight)
         {
             Source = source;
             Target = target;
@@ -20,25 +20,25 @@ namespace jrh.Algorithms.Dijkstra
 
         public override string ToString()
         {
-            return string.Format("--{0}--> {1}", Weight, Target.Number);
+            return string.Format("--{0}--> {1}", Weight, Target.ToString());
         }
     }
 
-    class Vertex
+    class Vertex<T>
     {
-        public int Number { get; private set; }
+        public T Obj { get; private set; }
         public bool Explored { get; private set; }
         public long ShortestDistance { get; private set; }
 
-        public Vertex(int number)
+        public Vertex(T obj)
         {
-            Number = number;
+            Obj = obj;
         }
 
         public void SetExplored()
         {
             if (Explored)
-                throw new InvalidOperationException(string.Format("Setting vertex {0} as explored, but it already is", Number));
+                throw new InvalidOperationException(string.Format("Setting vertex {0} as explored, but it already is", Obj.ToString()));
 
             Explored = true;
         }
@@ -51,50 +51,50 @@ namespace jrh.Algorithms.Dijkstra
         public override string ToString()
         {
             return string.Format("{0} {1} ({2})",
-                                 Number,
+                                 Obj.ToString(),
                                  Explored ? "Explored" : "Unexplored",
                                  ShortestDistance);
         }
     }
 
-    class Graph
+    class Graph<T> where T : IEquatable<T>
     {
-        private ICollection<Vertex> _vertices;
-        private ICollection<WeightedEdge> _edges;
+        private ICollection<Vertex<T>> _vertices;
+        private ICollection<WeightedEdge<T>> _edges;
 
-        Graph(ICollection<Vertex> vertices)
+        Graph(ICollection<Vertex<T>> vertices)
         {
             _vertices = vertices;
-            _edges = new List<WeightedEdge>();
+            _edges = new List<WeightedEdge<T>>();
         }
 
-        public void AddEdge(int labelFrom, int labelTo, long weight)
+        public void AddEdge(T from, T to, long weight)
         {
-            Vertex source = GetVertex(labelFrom);
-            Vertex target = GetVertex(labelTo);
-            WeightedEdge edge = new WeightedEdge(source, target, weight);
+            Vertex<T> source = GetVertex(from);
+            Vertex<T> target = GetVertex(to);
+            WeightedEdge<T> edge = new WeightedEdge<T>(source, target, weight);
 
             _edges.Add(edge);
         }
 
-        public Vertex GetVertex(int label)
+        public Vertex<T> GetVertex(T target)
         {
             var vertex = _vertices
-                .Where(v => v.Number == label)
+                .Where(v => v.Obj.Equals(target))
                 .FirstOrDefault();
 
             if (vertex == null)
-                throw new ArgumentOutOfRangeException("No vertex found with label " + label);
+                throw new ArgumentOutOfRangeException("Could not find vertex " + target.ToString());
 
             return vertex;
         }
 
-        public IEnumerable<WeightedEdge> EnumerableEdges()
+        public IEnumerable<WeightedEdge<T>> EnumerableEdges()
         {
             return _edges;
         }
 
-        public static Graph FromAdjacencyFile(string filename)
+        public static Graph<int> IntsFromAdjacencyFile(string filename)
         {
             ICollection<Tuple<int, int, long>> edges = new List<Tuple<int, int, long>>();
 
@@ -126,12 +126,12 @@ namespace jrh.Algorithms.Dijkstra
                 }
             }
 
-            ICollection<Vertex> vertices = new List<Vertex>();
+            ICollection<Vertex<int>> vertices = new List<Vertex<int>>();
 
             for (int i = 1; i <= maxNodeNumber; i++)
-                vertices.Add(new Vertex(i));
+                vertices.Add(new Vertex<int>(i));
 
-            Graph graph = new Graph(vertices);
+            Graph<int> graph = new Graph<int>(vertices);
 
             foreach (var edge in edges)
                 graph.AddEdge(edge.Item1, edge.Item2, edge.Item3);
