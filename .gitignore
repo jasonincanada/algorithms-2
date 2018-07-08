@@ -1,6 +1,9 @@
 kosaraju/bin/*
 kosaraju/obj/*
 
+dijkstra/bin/*
+dijkstra/obj/*
+
 *.cache
 *.dll
 *.exe
