@@ -20,7 +20,10 @@ namespace jrh.Algorithms.Dijkstra
 
         public override string ToString()
         {
-            return string.Format("--{0}--> {1}", Weight, Target.ToString());
+            return string.Format("{0} --{1}--> {2}",
+                                 Source.ToString(),
+                                 Weight,
+                                 Target.ToString());
         }
     }
 
