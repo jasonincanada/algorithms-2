@@ -8,7 +8,7 @@ namespace jrh.Algorithms.Dijkstra
         private Graph<T> _graph;
         private ILogger _log;
 
-        public DijkstraSearch(Graph<T> graph, Vertex<T> start, ILogger log)
+        public DijkstraSearch(Graph<T> graph, Graph<T>.Vertex start, ILogger log)
         {
             _graph = graph;
             _log = log;
@@ -23,7 +23,7 @@ namespace jrh.Algorithms.Dijkstra
 
         // Dijkstra's greedy score for an edge is the edge's weight plus the shortest distance
         // calculated up to the source vertex
-        private static long GreedyScore(WeightedEdge<T> edge)
+        private static long GreedyScore(Graph<T>.WeightedEdge edge)
         {
             return edge.Source.ShortestDistance + edge.Weight;
         }

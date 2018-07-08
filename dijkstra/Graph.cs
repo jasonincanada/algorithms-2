@@ -5,82 +5,82 @@ using System.Linq;
 
 namespace jrh.Algorithms.Dijkstra
 {
-    class WeightedEdge<T>
-    {
-        public Vertex<T> Source { get; private set; }
-        public Vertex<T> Target { get; private set; }
-        public long Weight { get; private set; }
-
-        public WeightedEdge(Vertex<T> source, Vertex<T> target, long weight)
-        {
-            Source = source;
-            Target = target;
-            Weight = weight;
-        }
-
-        public override string ToString()
-        {
-            return string.Format("{0} --{1}--> {2}",
-                                 Source.ToString(),
-                                 Weight,
-                                 Target.ToString());
-        }
-    }
-
-    class Vertex<T>
-    {
-        public T Obj { get; private set; }
-        public bool Explored { get; private set; }
-        public long ShortestDistance { get; private set; }
-
-        public Vertex(T obj)
-        {
-            Obj = obj;
-        }
-
-        public void SetExplored()
-        {
-            if (Explored)
-                throw new InvalidOperationException(string.Format("Setting vertex {0} as explored, but it already is", Obj.ToString()));
-
-            Explored = true;
-        }
-
-        public void SetShortestDistance(long distance)
-        {
-            ShortestDistance = distance;
-        }
-
-        public override string ToString()
-        {
-            return string.Format("{0} {1} ({2})",
-                                 Obj.ToString(),
-                                 Explored ? "Explored" : "Unexplored",
-                                 ShortestDistance);
-        }
-    }
-
     class Graph<T> where T : IEquatable<T>
     {
-        private ICollection<Vertex<T>> _vertices;
-        private ICollection<WeightedEdge<T>> _edges;
-
-        Graph(ICollection<Vertex<T>> vertices)
+        public class Vertex
         {
-            _vertices = vertices;
-            _edges = new List<WeightedEdge<T>>();
+            public T Obj { get; private set; }
+            public bool Explored { get; private set; }
+            public long ShortestDistance { get; private set; }
+
+            public Vertex(T obj)
+            {
+                Obj = obj;
+            }
+
+            public void SetExplored()
+            {
+                if (Explored)
+                    throw new InvalidOperationException(string.Format("Setting vertex {0} as explored, but it already is", Obj.ToString()));
+
+                Explored = true;
+            }
+
+            public void SetShortestDistance(long distance)
+            {
+                ShortestDistance = distance;
+            }
+
+            public override string ToString()
+            {
+                return string.Format("{0} {1} ({2})",
+                                     Obj.ToString(),
+                                     Explored ? "Explored" : "Unexplored",
+                                     ShortestDistance);
+            }
         }
 
-        public void AddEdge(T from, T to, long weight)
+        public class WeightedEdge
         {
-            Vertex<T> source = GetVertex(from);
-            Vertex<T> target = GetVertex(to);
-            WeightedEdge<T> edge = new WeightedEdge<T>(source, target, weight);
+            public Vertex Source { get; private set; }
+            public Vertex Target { get; private set; }
+            public long Weight { get; private set; }
+
+            public WeightedEdge(Vertex source, Vertex target, long weight)
+            {
+                Source = source;
+                Target = target;
+                Weight = weight;
+            }
+
+            public override string ToString()
+            {
+                return string.Format("{0} --{1}--> {2}",
+                                     Source.ToString(),
+                                     Weight,
+                                     Target.ToString());
+            }
+        }
+
+        private ICollection<Vertex> _vertices;
+        private ICollection<WeightedEdge> _edges;
+
+        Graph(ICollection<Vertex> vertices)
+        {
+            _vertices = vertices;
+            _edges = new List<WeightedEdge>();
+        }
+
+        void AddEdge(T from, T to, long weight)
+        {
+            Vertex source = GetVertex(from);
+            Vertex target = GetVertex(to);
+            WeightedEdge edge = new WeightedEdge(source, target, weight);
 
             _edges.Add(edge);
         }
 
-        public Vertex<T> GetVertex(T target)
+        public Vertex GetVertex(T target)
         {
             var vertex = _vertices
                 .Where(v => v.Obj.Equals(target))
@@ -92,7 +92,7 @@ namespace jrh.Algorithms.Dijkstra
             return vertex;
         }
 
-        public IEnumerable<WeightedEdge<T>> EnumerableEdges()
+        public IEnumerable<WeightedEdge> EnumerableEdges()
         {
             return _edges.AsEnumerable();
         }
@@ -129,12 +129,12 @@ namespace jrh.Algorithms.Dijkstra
                 }
             }
 
-            ICollection<Vertex<int>> vertices = new List<Vertex<int>>();
+            var vertices = new List<Graph<int>.Vertex>();
 
             for (int i = 1; i <= maxNodeNumber; i++)
-                vertices.Add(new Vertex<int>(i));
+                vertices.Add(new Graph<int>.Vertex(i));
 
-            Graph<int> graph = new Graph<int>(vertices);
+            var graph = new Graph<int>(vertices);
 
             foreach (var edge in edges)
                 graph.AddEdge(edge.Item1, edge.Item2, edge.Item3);

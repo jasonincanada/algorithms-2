@@ -24,8 +24,8 @@ namespace jrh.Algorithms.Dijkstra
     {
         static void Main(string[] args)
         {
-            Graph<int> graph = Graph<int>.IntsFromAdjacencyFile("sample.txt");
-            Vertex<int> start = graph.GetVertex(1);
+            var graph = Graph<int>.IntsFromAdjacencyFile("sample.txt");
+            var start = graph.GetVertex(1);
 
             var search = new DijkstraSearch<int>(graph,
                                                  start,
