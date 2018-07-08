@@ -94,7 +94,7 @@ namespace jrh.Algorithms.Dijkstra
 
         public IEnumerable<WeightedEdge<T>> EnumerableEdges()
         {
-            return _edges;
+            return _edges.AsEnumerable();
         }
 
         public static Graph<int> IntsFromAdjacencyFile(string filename)
