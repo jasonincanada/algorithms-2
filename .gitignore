@@ -4,6 +4,9 @@ kosaraju/obj/*
 dijkstra/bin/*
 dijkstra/obj/*
 
+median-maintenance/bin/*
+median-maintenance/obj/*
+
 *.cache
 *.dll
 *.exe
