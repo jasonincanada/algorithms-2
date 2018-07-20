@@ -7,6 +7,9 @@ dijkstra/obj/*
 median-maintenance/bin/*
 median-maintenance/obj/*
 
+2-sum/bin/*
+2-sum/obj/*
+
 *.cache
 *.dll
 *.exe
