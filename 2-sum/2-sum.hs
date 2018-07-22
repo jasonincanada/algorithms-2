@@ -15,6 +15,7 @@ type Sum = Integer
 getSums :: [Integer] -> [Sum]
 getSums numbers = nub $ go numbers (reverse numbers)
   where
+    go :: [Integer] -> [Integer] -> [Sum]
     go [] _  = []
     go _  [] = []
     go (a:as) (b:bs) | a + b > 10000    = go (a:as) bs
