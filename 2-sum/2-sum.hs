@@ -32,5 +32,5 @@ main = do
   file <- readFile "2sum-sorted.txt"
   let numbers = (map read . lines $ file) :: [Integer]
   let sums = getSums numbers
-  print $ (sums, length sums)
+  print (sums, length sums)
 
