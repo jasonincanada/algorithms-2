@@ -23,7 +23,7 @@ sumsBetween lower upper numbers = nub $ go numbers (reverse numbers)
                      | otherwise     = inner a (b:bs) ++ go as (b:bs)
 
     inner :: Integer -> [Integer] -> [Sum]
-    inner a = takeWhile (>lower)
+    inner a = takeWhile (>=lower)
               . map (+a)
               . filter (/=a)
 
