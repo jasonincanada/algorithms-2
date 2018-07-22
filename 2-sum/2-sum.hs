@@ -23,7 +23,10 @@ getSums numbers = nub $ go numbers (reverse numbers)
                      | otherwise        = inner a (b:bs) ++ go as (b:bs)
 
     inner :: Integer -> [Integer] -> [Sum]
-    inner a bs = takeWhile (>(-10000)) . map (+a) . filter (/=a) $ bs
+    inner a bs = takeWhile (>(-10000))
+                 . map (+a)
+                 . filter (/=a)
+                 $ bs
 
 main :: IO ()
 main = do
