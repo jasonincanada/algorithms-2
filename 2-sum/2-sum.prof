@@ -1,0 +1,33 @@
+	Sun Jul 22 18:27 2018 Time and Allocation Profiling Report  (Final)
+
+	   2-sum +RTS -p -RTS
+
+	total time  =       17.49 secs   (17492 ticks @ 1000 us, 1 processor)
+	total alloc = 12,230,951,096 bytes  (excludes profiling overheads)
+
+COST CENTRE  MODULE  %time %alloc
+
+main.numbers Main     86.0   78.8
+getSums      Main      6.5    0.2
+getSums.go   Main      3.5    0.5
+main         Main      3.5   20.3
+
+
+                                                             individual     inherited
+COST CENTRE        MODULE                  no.     entries  %time %alloc   %time %alloc
+
+MAIN               MAIN                     46           0    0.0    0.0   100.0  100.0
+ main              Main                     93           0    3.5   20.3   100.0  100.0
+  main.sums        Main                     95           1    0.0    0.0    10.5    0.9
+   getSums         Main                     96           1    6.5    0.2    10.5    0.9
+    getSums.go     Main                     97     1999999    3.5    0.5     4.0    0.7
+     getSums.inner Main                     98       95514    0.5    0.2     0.5    0.2
+  main.numbers     Main                     94           1   86.0   78.8    86.0   78.8
+ CAF               Main                     91           0    0.0    0.0     0.0    0.0
+  main             Main                     92           1    0.0    0.0     0.0    0.0
+ CAF               GHC.IO.Handle.FD         90           0    0.0    0.0     0.0    0.0
+ CAF               GHC.IO.Encoding          84           0    0.0    0.0     0.0    0.0
+ CAF               Text.Read.Lex            77           0    0.0    0.0     0.0    0.0
+ CAF               GHC.Conc.Signal          76           0    0.0    0.0     0.0    0.0
+ CAF               GHC.IO.Encoding.Iconv    73           0    0.0    0.0     0.0    0.0
+ CAF               GHC.IO.FD                72           0    0.0    0.0     0.0    0.0
