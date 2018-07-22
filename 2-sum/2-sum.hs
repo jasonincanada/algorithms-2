@@ -12,18 +12,18 @@ import Data.List (nub)
 
 type Sum = Integer
 
-getSums :: [Integer] -> [Sum]
-getSums numbers = nub $ go numbers (reverse numbers)
+sumsBetween :: Integer -> Integer -> [Integer] -> [Sum]
+sumsBetween lower upper numbers = nub $ go numbers (reverse numbers)
   where
     go :: [Integer] -> [Integer] -> [Sum]
     go [] _  = []
     go _  [] = []
-    go (a:as) (b:bs) | a + b > 10000    = go (a:as) bs
-                     | a + b < (-10000) = go as (b:bs)
-                     | otherwise        = inner a (b:bs) ++ go as (b:bs)
+    go (a:as) (b:bs) | a + b > upper = go (a:as) bs
+                     | a + b < lower = go as (b:bs)
+                     | otherwise     = inner a (b:bs) ++ go as (b:bs)
 
     inner :: Integer -> [Integer] -> [Sum]
-    inner a = takeWhile (>(-10000))
+    inner a = takeWhile (>lower)
               . map (+a)
               . filter (/=a)
 
@@ -31,6 +31,6 @@ main :: IO ()
 main = do
   file <- readFile "2sum-sorted.txt"
   let numbers = (map read . lines $ file) :: [Integer]
-  let sums = getSums numbers
+  let sums = sumsBetween (-10000) 10000 numbers
   print (sums, length sums)
 
